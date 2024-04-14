@@ -25,7 +25,10 @@ export default class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchQuery !== this.state.searchQuery) {
+    if (
+      prevState.searchQuery !== this.state.searchQuery ||
+      prevState.currentPage !== this.state.currentPage
+    ) {
       this.getImages();
     }
     if (prevState.images.length !== 0) {
@@ -40,7 +43,6 @@ export default class App extends Component {
       const { hits, totalHits } = await getImagesAPI(searchQuery, currentPage);
       this.setState(prev => ({
         images: [...prev.images, ...hits],
-        currentPage: prev.currentPage + 1,
         isLoading: false,
         loadMore: currentPage < Math.ceil(totalHits / 12),
       }));
@@ -71,7 +73,10 @@ export default class App extends Component {
     });
   };
 
-  handleClickLoadMore = () => this.getImages();
+  handleClickLoadMore = () =>
+    this.setState(prev => ({
+      currentPage: prev.currentPage + 1,
+    }));
 
   toggleModal = (modalImg, text) => {
     this.setState(({ isModalOpen }) => ({
