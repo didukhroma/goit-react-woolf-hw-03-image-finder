@@ -1,23 +1,48 @@
+import { normalizeQuery } from 'helpers/normalizeQuery';
 import { Component } from 'react';
+import {
+  StyledHeader,
+  StyledForm,
+  StyledInput,
+  StyledButton,
+  StyledSpan,
+} from './Searchbar.styled';
 
+const INITIAL_STATE = { query: '' };
 export default class Searchbar extends Component {
+  state = { ...INITIAL_STATE };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const normalizedQuery = normalizeQuery(this.state.query);
+    this.props.cbOnSubmit(normalizedQuery);
+    this.setState({ ...INITIAL_STATE });
+  };
+
+  handleChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
   render() {
     return (
-      <header class="searchbar">
-        <form class="form">
-          <button type="submit" class="button">
-            <span class="button-label">Search</span>
-          </button>
+      <StyledHeader>
+        <StyledForm onSubmit={this.handleSubmit}>
+          <StyledButton type="submit" className="button">
+            <StyledSpan>Search</StyledSpan>
+          </StyledButton>
 
-          <input
-            class="input"
+          <StyledInput
             type="text"
-            autocomplete="off"
-            autofocus
+            name="query"
+            value={this.state.query}
+            onChange={this.handleChange}
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
           />
-        </form>
-      </header>
+        </StyledForm>
+      </StyledHeader>
     );
   }
 }
