@@ -6,7 +6,7 @@ import Loader from 'components/Loader';
 import ImageGallery from 'components/ImageGallery';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
-import Error from 'components/Error/Error';
+import Error from 'components/Error';
 
 import scroll from 'helpers/scroll';
 
