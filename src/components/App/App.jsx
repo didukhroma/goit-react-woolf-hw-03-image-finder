@@ -1,13 +1,16 @@
-import Searchbar from 'components/Searchbar';
 import { Component } from 'react';
-import { StyledApp } from './App.styled';
+
+import Searchbar from 'components/Searchbar';
 import getImagesAPI from 'utils/api/apiService';
 import Loader from 'components/Loader';
 import ImageGallery from 'components/ImageGallery';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
+import Error from 'components/Error/Error';
+
 import scroll from 'helpers/scroll';
 
+import { StyledApp } from './App.styled';
 export default class App extends Component {
   state = {
     images: [],
@@ -42,9 +45,9 @@ export default class App extends Component {
         loadMore: currentPage < Math.ceil(totalHits / 12),
       }));
     } catch (error) {
-      console.log(error);
+      this.setState({ error: error.message });
     } finally {
-      this.setState({ isLoading: false, error: '' });
+      this.setState({ isLoading: false });
     }
   };
 
@@ -79,7 +82,7 @@ export default class App extends Component {
   };
 
   render() {
-    const { isLoading, images, loadMore, isModalOpen } = this.state;
+    const { isLoading, images, loadMore, isModalOpen, error } = this.state;
     return (
       <StyledApp>
         <Searchbar cbOnSubmit={this.handleSubmit} />
@@ -93,6 +96,7 @@ export default class App extends Component {
           />
         )}
         {loadMore && <Button cbOnClick={this.handleClickLoadMore} />}
+        {error && <Error message={error} />}
       </StyledApp>
     );
   }
