@@ -6,19 +6,12 @@ const options = {
   resultsPerPage: 12,
 };
 
-const apiService = async (query, page) => {
-  const request = `${BASE_URL}?q=${query}&page=${page}&key=${API_KEY}&image_type=${options.imageType}&orientation=${options.orientation}&per_page=${options.resultsPerPage}`;
+const getImagesAPI = async (query, page) => {
+  const requestStr = `${BASE_URL}?q=${query}&page=${page}&key=${API_KEY}&image_type=${options.imageType}&orientation=${options.orientation}&per_page=${options.resultsPerPage}`;
 
-  try {
-    const response = axios.get(request);
-    const {
-      data: { hits },
-    } = response;
-    return hits;
-  } catch (error) {
-    alert('Please enter a more specific word');
-    return null;
-  }
+  const response = await axios.get(requestStr);
+  const { data } = response;
+  return data;
 };
 
-export default apiService;
+export default getImagesAPI;
